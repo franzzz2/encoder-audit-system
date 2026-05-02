@@ -1,1 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encoder Audit System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h1>📊 Audit System</h1>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                <span class="icon">📈</span> Dashboard
+            </a>
+            <a href="#encode" class="nav-link" data-section="encode">
+                <span class="icon">⚙️</span> Encode Items
+            </a>
+            <a href="#history" class="nav-link" data-section="history">
+                <span class="icon">📋</span> History
+            </a>
+            <a href="#admin" class="nav-link" data-section="admin">
+                <span class="icon">🔐</span> Admin
+            </a>
+        </nav>
+    </div>
 
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h2 id="page-title">Dashboard</h2>
+                <div class="header-info">
+                    <span class="current-time" id="current-time">00:00:00</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Sections -->
+        <div class="content">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section active">
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-correct">0</div>
+                        <div class="stat-label">✅ Correct Entries</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-wrong">0</div>
+                        <div class="stat-label">❌ Wrong Entries</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-submitted">0</div>
+                        <div class="stat-label">📝 Total Submitted</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="accuracy-rate">0%</div>
+                        <div class="stat-label">🎯 Accuracy Rate</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Today's Activity</h3>
+                    <canvas id="activityChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Encode Section -->
+            <section id="encode" class="section">
+                <div class="encode-container">
+                    <h2>Encoder Input Form</h2>
+                    
+                    <div class="form-group">
+                        <label for="item-name">Item Name</label>
+                        <div class="autocomplete-wrapper">
+                            <input 
+                                type="text" 
+                                id="item-name" 
+                                placeholder="Type item name..." 
+                                autocomplete="off"
+                            >
+                            <ul class="autocomplete-list" id="autocomplete-list"></ul>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Type Selection</label>
+                            <div class="type-selector">
+                                <button class="type-btn" data-type="1X">1X</button>
+                                <button class="type-btn" data-type="2X">2X</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="quantity">Quantity</label>
+                            <input 
+                                type="number" 
+                                id="quantity" 
+                                placeholder="Enter quantity..." 
+                                min="1"
+                            >
+                        </div>
+                    </div>
+
+                    <button class="submit-btn" id="submit-btn">
+                        <span>Submit Entry</span>
+                    </button>
+
+                    <!-- Result Display -->
+                    <div class="result-container" id="result-container" style="display: none;">
+                        <div class="result-content" id="result-content"></div>
+                        <button class="reset-form-btn" id="reset-form-btn">New Entry</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- History Section -->
+            <section id="history" class="section">
+                <div class="history-container">
+                    <h2>Submission History</h2>
+                    
+                    <div class="search-box">
+                        <input 
+                            type="text" 
+                            id="history-search" 
+                            placeholder="Search items..."
+                        >
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Item Name</th>
+                                    <th>Type</th>
+                                    <th>Quantity</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-tbody">
+                                <!-- Dynamically populated -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Admin Section -->
+            <section id="admin" class="section">
+                <div class="admin-container">
+                    <h2>Admin Panel</h2>
+                    
+                    <!-- Login Form -->
+                    <div id="admin-login" class="admin-login">
+                        <div class="login-box">
+                            <h3>Admin Access</h3>
+                            <input 
+                                type="password" 
+                                id="admin-password" 
+                                placeholder="Enter admin password"
+                            >
+                            <button class="login-btn" id="admin-login-btn">Login</button>
+                        </div>
+                    </div>
+
+                    <!-- Admin Dashboard (Hidden until login) -->
+                    <div id="admin-dashboard" class="admin-dashboard" style="display: none;">
+                        <div class="admin-header">
+                            <h3>Admin Controls</h3>
+                            <button class="logout-btn" id="admin-logout-btn">Logout</button>
+                        </div>
+
+                        <div class="admin-tabs">
+                            <button class="admin-tab-btn active" data-tab="items">Manage Items</button>
+                            <button class="admin-tab-btn" data-tab="reports">Reports</button>
+                            <button class="admin-tab-btn" data-tab="settings">Settings</button>
+                        </div>
+
+                        <!-- Items Management Tab -->
+                        <div class="admin-tab-content active" id="items-tab">
+                            <h4>Add New Item</h4>
+                            <div class="admin-form">
+                                <input type="text" id="admin-item-name" placeholder="Item Name">
+                                <select id="admin-item-type">
+                                    <option value="1X">1X</option>
+                                    <option value="2X">2X</option>
+                                </select>
+                                <input type="number" id="admin-item-qty" placeholder="Correct Quantity" min="1">
+                                <button class="admin-add-btn" id="admin-add-btn">Add Item</button>
+                            </div>
+
+                            <h4>Current Items</h4>
+                            <div class="table-responsive">
+                                <table class="items-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Item Name</th>
+                                            <th>Type</th>
+                                            <th>Correct Qty</th>
+                                            <th>Total Hold Stickers</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="items-tbody">
+                                        <!-- Dynamically populated -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Reports Tab -->
+                        <div class="admin-tab-content" id="reports-tab">
+                            <h4>Daily Report</h4>
+                            <div class="report-stats">
+                                <div class="report-stat">
+                                    <span>Total Correct:</span>
+                                    <strong id="report-correct">0</strong>
+                                </div>
+                                <div class="report-stat">
+                                    <span>Total Wrong:</span>
+                                    <strong id="report-wrong">0</strong>
+                                </div>
+                                <div class="report-stat">
+                                    <span>Total Items Submitted:</span>
+                                    <strong id="report-submitted">0</strong>
+                                </div>
+                                <div class="report-stat">
+                                    <span>Accuracy:</span>
+                                    <strong id="report-accuracy">0%</strong>
+                                </div>
+                            </div>
+                            <button class="export-btn" id="export-btn">📥 Export Report</button>
+                        </div>
+
+                        <!-- Settings Tab -->
+                        <div class="admin-tab-content" id="settings-tab">
+                            <h4>System Settings</h4>
+                            <div class="settings-group">
+                                <label>
+                                    <input type="checkbox" id="sound-toggle" checked>
+                                    Enable Sound Effects
+                                </label>
+                            </div>
+                            <div class="settings-group">
+                                <label>
+                                    <input type="checkbox" id="auto-clear-toggle" checked>
+                                    Auto Clear Form After Submit
+                                </label>
+                            </div>
+                            <button class="reset-daily-btn" id="reset-daily-btn">Reset Daily Data</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="loading-spinner" id="loading-spinner">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="correct-sound" src="data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQIAAAAAAA=="></audio>
+    <audio id="wrong-sound" src="data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQIAAAAAAA=="></audio>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
