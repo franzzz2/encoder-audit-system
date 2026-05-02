@@ -1,11 +1,11 @@
 // ===== CONFIGURATION =====
 const CONFIG = {
     ADMIN_PASSWORD: 'admin123', // Change this!
-    GOOGLE_SHEETS_ID: 'YOUR_GOOGLE_SHEETS_ID', // Will be set from Google Apps Script
+    GOOGLE_SHEETS_ID: '1dD85QXn6c46lK3Z6GClNY7j2bqe6ZCPkica2M6v0r2U', // Will be set from Google Apps Script
     SHEET_NAME: 'Items',
     SOUND_ENABLED: true,
     AUTO_CLEAR: true,
-    API_URL: 'https://script.google.com/macros/d/YOUR_SCRIPT_ID/userlcallback'
+    API_URL: 'https://script.google.com/macros/s/AKfycbzLzSvDY4gckP3z3TjUipXXnKZph1Pab-3mFIbA2i3cSPsAV0oOn5IZHaH_xb1-KYML/exec'
 };
 
 // ===== STATE MANAGEMENT =====
